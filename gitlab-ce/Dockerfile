@@ -1,12 +1,12 @@
 # upstream https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/docker
-FROM debian:latest
+FROM debian:stretch
 MAINTAINER 若虚 <slpcat@qq.com>
 
 ENV \ 
     # Container variables
     TERM="xterm" \
     LANG="en_US.UTF-8" \ 
-    LANGUAGE="en_US:en" \
+    LANGUAGE="en_US.UTF-8" \
     LC_ALL="en_US.UTF-8" \
     TIMEZONE="Asia/Shanghai" \
     # Gitlab version
@@ -14,8 +14,16 @@ ENV \
     RELEASE_VERSION="latest"
 
 RUN \
+    # Set timezone and locales
+    echo "${TIMEZONE}" > /etc/timezone \
+    && echo "$LANG UTF-8" > /etc/locale.gen \
+    && apt-get update -q \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -yq apt-utils locales \ 
+    && ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
+    && update-locale LANG=$LANG \
+    && locale-gen $LANG \
+    && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales \
     # Install required packages
-    apt-get update -q \
     && apt-get dist-upgrade -y \
     && DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
       ca-certificates \
@@ -23,12 +31,7 @@ RUN \
       curl \
       gnupg \
       apt-transport-https \
-      locales \
-      vim \
-    # Set timezone
-    && ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
-    && echo "${TIMEZONE}" > /etc/timezone \
-    && locale-gen $LANG
+      vim
 
 # Download & Install GitLab
 # If you run GitLab Enterprise Edition point it to a location where you have downloaded it.
@@ -36,7 +39,8 @@ RUN \
     curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | bash \
     # repo from tsinghua university
     && sed -i 's/https:\/\/packages.gitlab.com\/gitlab/http:\/\/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.list.d/gitlab_gitlab-ce.list \
-    && apt-get update && apt-get install -yq --no-install-recommends gitlab-ce \
+    && apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends gitlab-ce \
     && apt-get clean all \
 
     # Manage SSHD through runit
@@ -55,17 +59,17 @@ COPY assets/gitlab.rb /etc/gitlab/gitlab.rb
 COPY assets/update-permissions /usr/sbin/
 
 RUN \
-    echo "gitlab_rails['gitlab_time_zone'] = '${TIMEZONE}'" >> /etc/gitlab/gitlab.rb \
     # Patch omnibus package
-    && sed -i "s/external_url 'GENERATED_EXTERNAL_URL'/# external_url 'GENERATED_EXTERNAL_URL'/" /opt/gitlab/etc/gitlab.rb.template \
+    sed -i "s/external_url 'GENERATED_EXTERNAL_URL'/# external_url 'GENERATED_EXTERNAL_URL'/" /opt/gitlab/etc/gitlab.rb.template \
     # Patch runsvdir-start
     && sed -i /file-max/d /opt/gitlab/embedded/bin/runsvdir-start \
+    && sed -i s/^ulimit/#ulimit/ /opt/gitlab/embedded/bin/runsvdir-start \
     # Patch cookbook
     && sed -i /sysctl/,+2d /opt/gitlab/embedded/cookbooks/gitlab/recipes/unicorn.rb \
     && sed -i /sysctl/,+2d /opt/gitlab/embedded/cookbooks/gitlab/recipes/postgresql.rb
 
 # Expose web & ssh
-EXPOSE 443 80 22
+EXPOSE 80/tcp 443/tcp 22/tcp
 
 # Define data volumes
 VOLUME ["/etc/gitlab", "/var/opt/gitlab", "/var/log/gitlab"]

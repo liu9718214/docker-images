@@ -101,6 +101,9 @@ if [ -n "${GITLAB_POST_RECONFIGURE_SCRIPT+x}" ]; then
   eval "${GITLAB_POST_RECONFIGURE_SCRIPT}"
 fi
 
+# Fix permissions
+update-permissions
+
 # Tail all logs
 gitlab-ctl tail &
 

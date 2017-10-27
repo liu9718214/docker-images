@@ -1261,7 +1261,7 @@ nginx['server_names_hash_bucket_size'] = 64
 ##! Docs: https://docs.gitlab.com/ce/administration/monitoring/prometheus/
 ################################################################################
 
-# prometheus['enable'] = true
+prometheus['enable'] = false
 # prometheus['monitor_kubernetes'] = true
 # prometheus['username'] = 'gitlab-prometheus'
 # prometheus['uid'] = nil

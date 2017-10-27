@@ -3,15 +3,16 @@ FROM debian:jessie
 
 MAINTAINER 若虚 <slpcat@qq.com>
 
+# Container variables
 ENV \ 
-    # Container variables
     TERM="xterm" \
     LANG="en_US.UTF-8" \ 
     LANGUAGE="en_US:en" \
     LC_ALL="en_US.UTF-8" \
     TIMEZONE="Asia/Shanghai"
+
+# Set timezone and locales
 RUN \
-    # Set timezone and locales
     echo "${TIMEZONE}" > /etc/timezone \
     && echo "$LANG UTF-8" > /etc/locale.gen \
     && apt-get update -q \
@@ -19,9 +20,11 @@ RUN \
     && ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
     && update-locale LANG=$LANG \
     && locale-gen $LANG \
-    && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales \
-    # Install required packages
-    && apt-get dist-upgrade -y
+    && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
+
+# Install required packages
+RUN \
+    apt-get dist-upgrade -y
 
 USER root
 

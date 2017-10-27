@@ -2,19 +2,19 @@
 FROM alpine:3.6
 MAINTAINER 若虚 <slpcat@qq.com>
 
+# Container variables
 ENV \
-    # Container variables
     TERM="xterm" \
     LANG="en_US.UTF-8" \ 
     LANGUAGE="en_US.UTF-8" \
     LC_ALL="en_US.UTF-8" \
     TIMEZONE="Asia/Shanghai"
 
+# Set timezone and locales
 RUN set -ex \
     && apk update \
     && apk upgrade \
     && apk add tzdata \
-    # Set timezone and locales
     && echo "${TIMEZONE}" > /etc/TZ \
     && ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
 
@@ -29,6 +29,12 @@ ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-4.0.1.tar.gz
 ENV REDIS_DOWNLOAD_SHA 2049cd6ae9167f258705081a6ef23bb80b7eff9ff3d0d7481e89510f27457591
 
 # for redis-sentinel see: http://redis.io/topics/sentinel
+# disable Redis protected mode [1] as it is unnecessary in context of Docker
+# (ports are not automatically exposed when running inside Docker, but rather explicitly by specifying -p / -P)
+# [1]: https://github.com/antirez/redis/commit/edd4d555df57dc84265fdfb4ef59a4678832f6da
+# for future reference, we modify this directly in the source instead of just supplying a default configuration flag because apparently "if you specify any argument to redis-server, [it assumes] you are going to specify everything"
+# see also https://github.com/docker-library/redis/issues/4#issuecomment-50780840
+# (more exactly, this makes sure the default behavior of "save on SIGTERM" stays functional by default)
 RUN set -ex; \
 	\
 	apk add --no-cache --virtual .build-deps \
@@ -45,15 +51,9 @@ RUN set -ex; \
 	tar -xzf redis.tar.gz -C /usr/src/redis --strip-components=1; \
 	rm redis.tar.gz; \
 	\
-# disable Redis protected mode [1] as it is unnecessary in context of Docker
-# (ports are not automatically exposed when running inside Docker, but rather explicitly by specifying -p / -P)
-# [1]: https://github.com/antirez/redis/commit/edd4d555df57dc84265fdfb4ef59a4678832f6da
 	grep -q '^#define CONFIG_DEFAULT_PROTECTED_MODE 1$' /usr/src/redis/src/server.h; \
 	sed -ri 's!^(#define CONFIG_DEFAULT_PROTECTED_MODE) 1$!\1 0!' /usr/src/redis/src/server.h; \
 	grep -q '^#define CONFIG_DEFAULT_PROTECTED_MODE 0$' /usr/src/redis/src/server.h; \
-# for future reference, we modify this directly in the source instead of just supplying a default configuration flag because apparently "if you specify any argument to redis-server, [it assumes] you are going to specify everything"
-# see also https://github.com/docker-library/redis/issues/4#issuecomment-50780840
-# (more exactly, this makes sure the default behavior of "save on SIGTERM" stays functional by default)
 	\
 	make -C /usr/src/redis -j "$(nproc)"; \
 	make -C /usr/src/redis install; \

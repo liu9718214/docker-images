@@ -3,15 +3,16 @@
 FROM debian:jessie
 MAINTAINER 若虚 <slpcat@qq.com>
 
+# Container variables
 ENV \ 
-    # Container variables
     TERM="xterm" \
     LANG="en_US.UTF-8" \ 
     LANGUAGE="en_US:en" \
     LC_ALL="en_US.UTF-8" \
     TIMEZONE="Asia/Shanghai"
+
+# Set timezone and locales
 RUN \
-    # Set timezone and locales
     echo "${TIMEZONE}" > /etc/timezone \
     && echo "$LANG UTF-8" > /etc/locale.gen \
     && apt-get update -q \
@@ -19,9 +20,11 @@ RUN \
     && ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
     && update-locale LANG=$LANG \
     && locale-gen $LANG \
-    && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales \
-    # Install required packages
-    && apt-get dist-upgrade -y
+    && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
+
+# Install required packages
+RUN \
+    apt-get dist-upgrade -y
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r mysql && useradd -r -g mysql mysql
@@ -49,16 +52,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		pwgen \
 	&& rm -rf /var/lib/apt/lists/*
 
-ENV GPG_KEYS \
 # pub   1024D/CD2EFD2A 2009-12-15
 #       Key fingerprint = 430B DF5C 56E7 C94E 848E  E60C 1C4C BDCD CD2E FD2A
 # uid                  Percona MySQL Development Team <mysql-dev@percona.com>
 # sub   2048g/2D607DAF 2009-12-15
-	430BDF5C56E7C94E848EE60C1C4CBDCDCD2EFD2A \
 # pub   4096R/8507EFA5 2016-06-30
 #       Key fingerprint = 4D1B B29D 63D9 8E42 2B21  13B1 9334 A25F 8507 EFA5
 # uid                  Percona MySQL Development Team (Packaging key) <mysql-dev@percona.com>
 # sub   4096R/4CAC6D72 2016-06-30
+ENV GPG_KEYS \
+	430BDF5C56E7C94E848EE60C1C4CBDCDCD2EFD2A \
 	4D1BB29D63D98E422B2113B19334A25F8507EFA5
 RUN set -ex; \
 	export GNUPGHOME="$(mktemp -d)"; \
@@ -76,6 +79,9 @@ ENV PERCONA_VERSION 5.6.37-82.2-1.jessie
 
 # the "/var/lib/mysql" stuff here is because the mysql-server postinst doesn't have an explicit way to disable the mysql_install_db codepath besides having a database already "configured" (ie, stuff in /var/lib/mysql/mysql)
 # also, we set debconf keys to make APT a little quieter
+# comment out any "user" entires in the MySQL config ("docker-entrypoint.sh" or "--user" will handle user switching)
+# purge and re-create /var/lib/mysql with appropriate ownership
+# ensure that /var/run/mysqld (used for socket and lock files) is writable regardless of the UID our mysqld instance ends up having at runtime
 RUN { \
 		for key in \
 			percona-server-server/root_password \
@@ -90,12 +96,9 @@ RUN { \
 	&& DEBIAN_FRONTEND=noninteractive apt-get install -y \
 		percona-server-server-$PERCONA_MAJOR=$PERCONA_VERSION \
 	&& rm -rf /var/lib/apt/lists/* \
-# comment out any "user" entires in the MySQL config ("docker-entrypoint.sh" or "--user" will handle user switching)
 	&& sed -ri 's/^user\s/#&/' /etc/mysql/my.cnf \
-# purge and re-create /var/lib/mysql with appropriate ownership
 	&& rm -rf /var/lib/mysql && mkdir -p /var/lib/mysql /var/run/mysqld \
 	&& chown -R mysql:mysql /var/lib/mysql /var/run/mysqld \
-# ensure that /var/run/mysqld (used for socket and lock files) is writable regardless of the UID our mysqld instance ends up having at runtime
 	&& chmod 777 /var/run/mysqld
 
 # comment out a few problematic configuration values

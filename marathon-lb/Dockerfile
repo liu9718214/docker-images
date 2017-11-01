@@ -1,6 +1,31 @@
 # upstream https://github.com/mesosphere/marathon-lb
 FROM debian:buster
 
+MAINTAINER 若虚 <slpcat@qq.com>
+
+# Container variables
+ENV \ 
+    TERM="xterm" \
+    LANG="en_US.UTF-8" \ 
+    LANGUAGE="en_US:en" \
+    LC_ALL="en_US.UTF-8" \
+    TIMEZONE="Asia/Shanghai"
+
+# Set timezone and locales
+RUN \
+    echo "${TIMEZONE}" > /etc/timezone \
+    && echo "$LANG UTF-8" > /etc/locale.gen \
+    && apt-get update -q \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -yq apt-utils dialog locales \ 
+    && ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
+    && update-locale LANG=$LANG \
+    && locale-gen $LANG \
+    && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
+
+# Install required packages
+RUN \
+    apt-get dist-upgrade -y
+
 # runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates \
@@ -14,11 +39,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         python3 \
         runit \
         gnupg-agent \
+        libdpkg-perl \
 	socat \
     && rm -rf /var/lib/apt/lists/*
 
 ENV TINI_VERSION=v0.13.2 \
     TINI_GPG_KEY=595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7
+
 RUN set -x \
     && apt-get update && apt-get install -y --no-install-recommends dirmngr gpg wget \
         && rm -rf /var/lib/apt/lists/* \
@@ -35,11 +62,18 @@ RUN set -x \
 
 
 ENV HAPROXY_MAJOR=1.7 \
-    HAPROXY_VERSION=1.7.6 \
-    HAPROXY_MD5=8f4328cf66137f0dbf6901e065f603cc
+    HAPROXY_VERSION=1.7.9 \
+    HAPROXY_MD5=a2bbbdd45ffe18d99cdcf26aa992f92d
 
 COPY requirements.txt /marathon-lb/
+COPY pip.conf /etc/pip.conf
 
+# Build HAProxy
+# Install Python dependencies
+# Install Python packages with --upgrade so we get new packages even if a system
+# package is already installed. Combine with --force-reinstall to ensure we get
+# a local package even if the system package is up-to-date as the system package
+# will probably be uninstalled with the build dependencies.
 RUN set -x \
     && buildDeps=' \
         gcc \
@@ -58,8 +92,6 @@ RUN set -x \
     && apt-get update \
     && apt-get install -y --no-install-recommends $buildDeps \
     && rm -rf /var/lib/apt/lists/* \
-    \
-# Build HAProxy
     && wget -O haproxy.tar.gz "https://www.haproxy.org/download/$HAPROXY_MAJOR/src/haproxy-$HAPROXY_VERSION.tar.gz" \
     && echo "$HAPROXY_MD5  haproxy.tar.gz" | md5sum -c \
     && mkdir -p /usr/src/haproxy \
@@ -79,14 +111,7 @@ RUN set -x \
         all \
         install-bin \
     && rm -rf /usr/src/haproxy \
-    \
-# Install Python dependencies
-# Install Python packages with --upgrade so we get new packages even if a system
-# package is already installed. Combine with --force-reinstall to ensure we get
-# a local package even if the system package is up-to-date as the system package
-# will probably be uninstalled with the build dependencies.
     && pip3 install --no-cache --upgrade --force-reinstall -r /marathon-lb/requirements.txt \
-    \
     && apt-get purge -y --auto-remove $buildDeps
 
 COPY  . /marathon-lb

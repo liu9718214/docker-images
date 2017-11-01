@@ -95,7 +95,7 @@ RUN { \
 	} | debconf-set-selections \
 	&& apt-get update \
 	&& DEBIAN_FRONTEND=noninteractive apt-get install -y \
-		percona-server-server-$PERCONA_MAJOR=$PERCONA_VERSION \
+		percona-server-server-$PERCONA_MAJOR=$PERCONA_VERSION mytop mydumper \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& sed -ri 's/^user\s/#&/' /etc/mysql/my.cnf \
 	&& rm -rf /var/lib/mysql && mkdir -p /var/lib/mysql /var/run/mysqld \

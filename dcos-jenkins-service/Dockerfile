@@ -1,5 +1,33 @@
 # upsteam https://github.com/mesosphere/dcos-jenkins-service
 FROM jenkins/jenkins:2.73.2
+
+MAINTAINER 若虚 <slpcat@qq.com>
+
+USER root
+
+# Container variables
+ENV \ 
+    TERM="xterm" \
+    LANG="en_US.UTF-8" \ 
+    LANGUAGE="en_US:en" \
+    LC_ALL="en_US.UTF-8" \
+    TIMEZONE="Asia/Shanghai"
+
+# Set timezone and locales
+RUN \
+    echo "${TIMEZONE}" > /etc/timezone \
+    && echo "$LANG UTF-8" > /etc/locale.gen \
+    && apt-get update -q \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -yq apt-utils dialog locales \ 
+    && ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
+    && update-locale LANG=$LANG \
+    && locale-gen $LANG \
+    && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
+
+# Install required packages
+RUN \
+    apt-get dist-upgrade -y
+
 WORKDIR /tmp
 
 # Environment variables used throughout this Dockerfile
@@ -13,10 +41,8 @@ ENV JENKINS_FOLDER /usr/share/jenkins
 # Build Args
 ARG LIBMESOS_DOWNLOAD_URL=https://downloads.mesosphere.com/libmesos-bundle/libmesos-bundle-1.8.7-1.0.2-2.tar.gz
 ARG LIBMESOS_DOWNLOAD_SHA256=9757b2e86c975488f68ce325fdf08578669e3c0f1fcccf24545d3bd1bd423a25
-ARG BLUEOCEAN_VERSION=1.3.0
+ARG BLUEOCEAN_VERSION=1.3.1
 ARG JENKINS_STAGING=/usr/share/jenkins/ref/
-
-USER root
 
 # install dependencies
 RUN apt-get update && apt-get install -y nginx python zip jq
@@ -69,51 +95,51 @@ RUN /usr/local/bin/install-plugins.sh       \
   ace-editor:1.1                 \
   ansicolor:0.5.2                \
   antisamy-markup-formatter:1.5  \
-  artifactory:2.12.2             \
+  artifactory:2.13.1             \
   authentication-tokens:1.3      \
   azure-credentials:1.2          \
   azure-vm-agents:0.4.7.1        \
-  branch-api:2.0.11              \
+  branch-api:2.0.15              \
   build-name-setter:1.6.7        \
-  build-timeout:1.18             \
-  cloudbees-folder:6.1.2         \
+  build-timeout:1.19             \
+  cloudbees-folder:6.2.1         \
   conditional-buildstep:1.3.6    \
-  config-file-provider:2.16.3    \
-  copyartifact:1.38.1            \
+  config-file-provider:2.16.4    \
+  copyartifact:1.39              \
   cvs:2.13                       \
   docker-build-publish:1.3.2     \
   docker-workflow:1.13           \
-  durable-task:1.14              \
-  ec2:1.36                       \
+  durable-task:1.15              \
+  ec2:1.37                       \
   embeddable-build-status:1.9    \
   external-monitor-job:1.7       \
   ghprb:1.39.0                   \
-  git:3.5.1                      \
-  git-client:2.5.0               \
+  git:3.6.3                      \
+  git-client:2.6.0               \
   git-server:1.7                 \
-  github:1.28.0                  \
-  github-api:1.86                \
-  github-branch-source:2.2.3     \
+  github:1.28.1                  \
+  github-api:1.89                \
+  github-branch-source:2.2.4     \
   github-organization-folder:1.6 \
-  gitlab:1.4.8                   \
-  gradle:1.27.1                  \
+  gitlab:1.5.0                   \
+  gradle:1.28                    \
   greenballs:1.15                \
   handlebars:1.1.1               \
   ivy:1.27.1                     \
-  jackson2-api:2.7.3             \
-  job-dsl:1.65                   \
-  jobConfigHistory:2.17          \
-  jquery:1.11.2-1                \
+  jackson2-api:2.8.7.0           \
+  job-dsl:1.66                   \
+  jobConfigHistory:2.18          \
+  jquery:1.12.4-0                \
   ldap:1.17                      \
   mapdb-api:1.0.9.0              \
   marathon:1.6.0                 \
-  matrix-auth:1.7                \
-  matrix-project:1.11            \
-  maven-plugin:2.17              \
+  matrix-auth:2.1                \
+  matrix-project:1.12            \
+  maven-plugin:3.0               \
   mesos:0.15.0                   \
   metrics:3.1.2.10               \
   momentjs:1.1.1                 \
-  monitoring:1.69.0              \
+  monitoring:1.70.0              \
   nant:1.4.3                     \
   node-iterator-api:1.5.0        \
   pam-auth:1.3                   \
@@ -122,38 +148,38 @@ RUN /usr/local/bin/install-plugins.sh       \
   pipeline-github-lib:1.0        \
   pipeline-input-step:2.8        \
   pipeline-milestone-step:1.3.1  \
-  pipeline-model-api:1.1.9       \
-  pipeline-model-definition:1.1.9 \
-  pipeline-model-extensions:1.1.9 \
+  pipeline-model-api:1.2.2       \
+  pipeline-model-definition:1.2.2 \
+  pipeline-model-extensions:1.2.2 \
   pipeline-rest-api:2.9          \
   pipeline-stage-step:2.2        \
   pipeline-stage-view:2.9        \
   plain-credentials:1.4          \
-  rebuild:1.25                   \
-  role-strategy:2.6.0            \
+  rebuild:1.27                   \
+  role-strategy:2.6.1            \
   run-condition:1.0              \
   s3:0.10.12                     \
   saferestart:0.3                \
   saml:1.0.4                     \
-  scm-api:2.2.2                  \
+  scm-api:2.2.3                  \
   ssh-agent:1.15                 \
-  ssh-slaves:1.21                \
+  ssh-slaves:1.22                \
   subversion:2.9                 \
   timestamper:1.8.8              \
   translation:1.15               \
   variant:1.1                    \
   windows-slaves:1.3.1           \
   workflow-aggregator:2.5        \
-  workflow-api:2.20              \
+  workflow-api:2.23.1            \
   workflow-basic-steps:2.6       \
-  workflow-cps:2.40              \
+  workflow-cps:2.41              \
   workflow-cps-global-lib:2.9    \
-  workflow-durable-task-step:2.15 \
-  workflow-job:2.14.1            \
+  workflow-durable-task-step:2.17 \
+  workflow-job:2.15              \
   workflow-multibranch:2.16      \
   workflow-scm-step:2.6          \
-  workflow-step-api:2.12         \
-  workflow-support:2.14
+  workflow-step-api:2.13         \
+  workflow-support:2.16
 
 # disable first-run wizard
 RUN echo 2.0 > /usr/share/jenkins/ref/jenkins.install.UpgradeWizard.state

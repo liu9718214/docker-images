@@ -118,8 +118,8 @@ RUN /usr/local/bin/install-plugins.sh       \
   git-client:2.6.0               \
   git-server:1.7                 \
   github:1.28.1                  \
-  github-api:1.89                \
-  github-branch-source:2.2.4     \
+  github-api:1.90                \
+  github-branch-source:2.2.5     \
   github-organization-folder:1.6 \
   gitlab:1.5.0                   \
   gradle:1.28                    \

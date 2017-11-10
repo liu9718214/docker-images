@@ -1,5 +1,5 @@
 # upstream https://github.com/mesosphere/marathon-lb
-FROM debian:buster
+FROM debian:stretch
 
 MAINTAINER 若虚 <slpcat@qq.com>
 

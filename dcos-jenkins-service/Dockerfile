@@ -1,5 +1,5 @@
 # upsteam https://github.com/mesosphere/dcos-jenkins-service
-FROM jenkins/jenkins:2.73.2
+FROM jenkins/jenkins:2.73.3
 
 MAINTAINER 若虚 <slpcat@qq.com>
 
@@ -97,8 +97,8 @@ RUN /usr/local/bin/install-plugins.sh       \
   antisamy-markup-formatter:1.5  \
   artifactory:2.13.1             \
   authentication-tokens:1.3      \
-  azure-credentials:1.2          \
-  azure-vm-agents:0.4.7.1        \
+  azure-credentials:1.3          \
+  azure-vm-agents:0.4.8          \
   branch-api:2.0.15              \
   build-name-setter:1.6.7        \
   build-timeout:1.19             \
@@ -108,24 +108,24 @@ RUN /usr/local/bin/install-plugins.sh       \
   copyartifact:1.39              \
   cvs:2.13                       \
   docker-build-publish:1.3.2     \
-  docker-workflow:1.13           \
+  docker-workflow:1.14           \
   durable-task:1.15              \
   ec2:1.37                       \
   embeddable-build-status:1.9    \
   external-monitor-job:1.7       \
   ghprb:1.39.0                   \
-  git:3.6.3                      \
+  git:3.6.4                      \
   git-client:2.6.0               \
   git-server:1.7                 \
   github:1.28.1                  \
   github-api:1.90                \
-  github-branch-source:2.2.5     \
+  github-branch-source:2.2.6     \
   github-organization-folder:1.6 \
-  gitlab:1.5.0                   \
+  gitlab:1.5.1                   \
   gradle:1.28                    \
   greenballs:1.15                \
   handlebars:1.1.1               \
-  ivy:1.27.1                     \
+  ivy:1.28                       \
   jackson2-api:2.8.7.0           \
   job-dsl:1.66                   \
   jobConfigHistory:2.18          \
@@ -133,7 +133,7 @@ RUN /usr/local/bin/install-plugins.sh       \
   ldap:1.17                      \
   mapdb-api:1.0.9.0              \
   marathon:1.6.0                 \
-  matrix-auth:2.1                \
+  matrix-auth:2.1.1              \
   matrix-project:1.12            \
   maven-plugin:3.0               \
   mesos:0.15.0                   \
@@ -148,11 +148,11 @@ RUN /usr/local/bin/install-plugins.sh       \
   pipeline-github-lib:1.0        \
   pipeline-input-step:2.8        \
   pipeline-milestone-step:1.3.1  \
-  pipeline-model-api:1.2.2       \
-  pipeline-model-definition:1.2.2 \
-  pipeline-model-extensions:1.2.2 \
+  pipeline-model-api:1.2.3       \
+  pipeline-model-definition:1.2.3 \
+  pipeline-model-extensions:1.2.3 \
   pipeline-rest-api:2.9          \
-  pipeline-stage-step:2.2        \
+  pipeline-stage-step:2.3        \
   pipeline-stage-view:2.9        \
   plain-credentials:1.4          \
   rebuild:1.27                   \
@@ -161,7 +161,7 @@ RUN /usr/local/bin/install-plugins.sh       \
   s3:0.10.12                     \
   saferestart:0.3                \
   saml:1.0.4                     \
-  scm-api:2.2.3                  \
+  scm-api:2.2.5                  \
   ssh-agent:1.15                 \
   ssh-slaves:1.22                \
   subversion:2.9                 \

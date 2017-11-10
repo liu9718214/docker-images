@@ -37,9 +37,9 @@ RUN \
 # Download & Install GitLab
 # If you run GitLab Enterprise Edition point it to a location where you have downloaded it.
 # repo from tsinghua university
+#&& sed -i 's/https:\/\/packages.gitlab.com\/gitlab/http:\/\/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.list.d/gitlab_gitlab-ce.list \
 RUN \
     curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | bash \
-    #&& sed -i 's/https:\/\/packages.gitlab.com\/gitlab/http:\/\/mirrors.tuna.tsinghua.edu.cn/' /etc/apt/sources.list.d/gitlab_gitlab-ce.list \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends gitlab-ce \
     && apt-get clean all

@@ -119,7 +119,7 @@ RUN /usr/local/bin/install-plugins.sh       \
   git-server:1.7                 \
   github:1.28.1                  \
   github-api:1.90                \
-  github-branch-source:2.2.6     \
+  github-branch-source:2.3       \
   github-organization-folder:1.6 \
   gitlab:1.5.1                   \
   gradle:1.28                    \
@@ -148,9 +148,9 @@ RUN /usr/local/bin/install-plugins.sh       \
   pipeline-github-lib:1.0        \
   pipeline-input-step:2.8        \
   pipeline-milestone-step:1.3.1  \
-  pipeline-model-api:1.2.3       \
-  pipeline-model-definition:1.2.3 \
-  pipeline-model-extensions:1.2.3 \
+  pipeline-model-api:1.2.4       \
+  pipeline-model-definition:1.2.4 \
+  pipeline-model-extensions:1.2.4 \
   pipeline-rest-api:2.9          \
   pipeline-stage-step:2.3        \
   pipeline-stage-view:2.9        \

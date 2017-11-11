@@ -29,7 +29,7 @@ RUN \
 
 ENV SYSDIG_REPOSITORY stable
 
-LABEL RUN="docker run -i -t -v /var/run/docker.sock:/host/var/run/docker.sock -v /dev:/host/dev -v /proc:/host/proc:ro -v /boot:/host/boot:ro -v /lib/modules:/host/lib/modules:ro -v /usr:/host/usr:ro --name NAME IMAGE"
+LABEL RUN="docker run -i -t --privileged -v /var/run/docker.sock:/host/var/run/docker.sock -v /dev:/host/dev -v /proc:/host/proc:ro -v /boot:/host/boot:ro -v /lib/modules:/host/lib/modules:ro -v /usr:/host/usr:ro --name NAME IMAGE"
 
 ENV SYSDIG_HOST_ROOT /host
 
@@ -61,6 +61,7 @@ RUN echo "deb http://httpredir.debian.org/debian jessie main" > /etc/apt/sources
 
 RUN rm -rf /usr/bin/gcc \
  && ln -s /usr/bin/gcc-4.9 /usr/bin/gcc \
+ && ln -s /usr/bin/gcc-4.9 /usr/bin/gcc-6 \
  && ln -s /usr/bin/gcc-4.9 /usr/bin/gcc-4.8 \
  && ln -s /usr/bin/gcc-4.9 /usr/bin/gcc-4.7 \
  && ln -s /usr/bin/gcc-4.9 /usr/bin/gcc-4.6

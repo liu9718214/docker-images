@@ -2,8 +2,17 @@
 
 [![Build Status](https://travis-ci.org/container-images/systemtap.svg?branch=master)](https://travis-ci.org/container-images/systemtap)
 
+Host OS prepare
+Host OS prepare:
+Debian, Ubuntu
+apt-get -y install linux-headers-$(uname -r)
+apt install linux-image-amd64-dbg
+CentOS, RHEL, Fedora, Amazon Linux
+yum -y install kernel-devel-$(uname -r)
+
 SystemTap running in a container.
 
+docker run --cap-add SYS_MODULE -v /sys/kernel/debug:/sys/kernel/debug -v /usr/src:/usr/src -v /lib/modules:/lib/modules -v /usr/lib/modules/:/usr/lib/modules/ -v /usr/lib/debug:/usr/lib/debug -t -i slpcat/systemtap
 
 ## Usage
 

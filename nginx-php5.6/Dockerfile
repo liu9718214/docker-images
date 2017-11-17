@@ -11,7 +11,8 @@ ENV \
     #PHP FPM variables
     PHP_FPM_USER="www" \
     PHP_FPM_GROUP="www" \
-    PHP_FPM_LISTEN_MODE="0660"
+    PHP_FPM_LISTEN_MODE="0660" \
+    APP_ENV="dev"
 
 
 COPY etc /etc/

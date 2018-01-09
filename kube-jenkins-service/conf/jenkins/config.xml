@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <hudson>
-  <disabledAdministrativeMonitors>
-    <string>hudson.diagnosis.ReverseProxySetupMonitor</string>
-  </disabledAdministrativeMonitors>
+  <disabledAdministrativeMonitors/>
   <numExecutors>0</numExecutors>
   <mode>NORMAL</mode>
   <useSecurity>true</useSecurity>
@@ -12,64 +10,96 @@
   <projectNamingStrategy class="jenkins.model.ProjectNamingStrategy$DefaultProjectNamingStrategy"/>
   <workspaceDir>${JENKINS_HOME}/workspace/${ITEM_FULLNAME}</workspaceDir>
   <buildsDir>${ITEM_ROOTDIR}/builds</buildsDir>
+  <markupFormatter class="hudson.markup.EscapedMarkupFormatter"/>
   <jdks/>
   <viewsTabBar class="hudson.views.DefaultViewsTabBar"/>
   <myViewsTabBar class="hudson.views.DefaultMyViewsTabBar"/>
   <clouds>
-    <org.jenkinsci.plugins.mesos.MesosCloud plugin="mesos">
-      <name>MesosCloud</name>
-      <nativeLibraryPath>/libmesos-bundle/lib/libmesos.so</nativeLibraryPath>
-      <master>zk://leader.mesos:2181/mesos</master>
-      <description></description>
-      <frameworkName>jenkins</frameworkName>
-      <slavesUser>root</slavesUser>
-      <role>*</role>
-      <principal>jenkins</principal>
-      <secret></secret>
-      <checkpoint>true</checkpoint>
-      <onDemandRegistration>false</onDemandRegistration>
-      <jenkinsURL></jenkinsURL>
-      <slaveInfos>
-        <org.jenkinsci.plugins.mesos.MesosSlaveInfo>
-          <slaveCpus>0.5</slaveCpus>
-          <slaveMem>512</slaveMem>
-          <executorCpus>0.1</executorCpus>
-          <maxExecutors>4</maxExecutors>
-          <executorMem>128</executorMem>
-          <remoteFSRoot>/mnt/mesos/sandbox</remoteFSRoot>
-          <idleTerminationMinutes>3</idleTerminationMinutes>
-          <jvmArgs>-Xms16m -XX:+UseConcMarkSweepGC -Djava.net.preferIPv4Stack=true</jvmArgs>
-          <jnlpArgs>-noReconnect</jnlpArgs>
-          <containerInfo>
-            <type>DOCKER</type>
-            <dockerImage>slpcat/jenkins-dind</dockerImage>
-            <networking>BRIDGE</networking>
-            <useCustomDockerCommandShell>true</useCustomDockerCommandShell>
-            <customDockerCommandShell>wrapper.sh</customDockerCommandShell>
-            <dockerPrivilegedMode>true</dockerPrivilegedMode>
-            <dockerForcePullImage>false</dockerForcePullImage>
-          </containerInfo>
-          <mode>NORMAL</mode>
-        </org.jenkinsci.plugins.mesos.MesosSlaveInfo>
-      </slaveInfos>
-    </org.jenkinsci.plugins.mesos.MesosCloud>
+    <org.csanchez.jenkins.plugins.kubernetes.KubernetesCloud plugin="kubernetes@1.1.2">
+      <name>kubernetes</name>
+      <defaultsProviderTemplate>jenkins-slave</defaultsProviderTemplate>
+      <templates>
+        <org.csanchez.jenkins.plugins.kubernetes.PodTemplate>
+          <inheritFrom></inheritFrom>
+          <name>jnlp-slave</name>
+          <namespace>default</namespace>
+          <privileged>false</privileged>
+          <alwaysPullImage>false</alwaysPullImage>
+          <instanceCap>80</instanceCap>
+          <slaveConnectTimeout>90</slaveConnectTimeout>
+          <idleMinutes>60</idleMinutes>
+          <activeDeadlineSeconds>1200</activeDeadlineSeconds>
+          <label>jnlp-slave</label>
+          <nodeSelector></nodeSelector>
+          <nodeUsageMode>NORMAL</nodeUsageMode>
+          <customWorkspaceVolumeEnabled>false</customWorkspaceVolumeEnabled>
+          <workspaceVolume class="org.csanchez.jenkins.plugins.kubernetes.volumes.workspace.EmptyDirWorkspaceVolume">
+            <memory>false</memory>
+          </workspaceVolume>
+          <volumes/>
+          <containers>
+            <org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate>
+              <name>jnlp</name>
+              <image>slpcat/kube-jenkins-dind-agent</image>
+              <privileged>true</privileged>
+              <alwaysPullImage>false</alwaysPullImage>
+              <workingDir>/home/jenkins</workingDir>
+              <command></command>
+              <args>${computer.jnlpmac} ${computer.name}</args>
+              <ttyEnabled>false</ttyEnabled>
+              <resourceRequestCpu></resourceRequestCpu>
+              <resourceRequestMemory></resourceRequestMemory>
+              <resourceLimitCpu></resourceLimitCpu>
+              <resourceLimitMemory></resourceLimitMemory>
+              <envVars/>
+              <ports/>
+              <livenessProbe>
+                <execArgs></execArgs>
+                <timeoutSeconds>0</timeoutSeconds>
+                <initialDelaySeconds>0</initialDelaySeconds>
+                <failureThreshold>0</failureThreshold>
+                <periodSeconds>0</periodSeconds>
+                <successThreshold>0</successThreshold>
+              </livenessProbe>
+            </org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate>
+          </containers>
+          <envVars/>
+          <annotations/>
+          <imagePullSecrets/>
+        </org.csanchez.jenkins.plugins.kubernetes.PodTemplate>
+      </templates>
+      <serverUrl>https://kubernetes.default.svc.cluster.local</serverUrl>
+      <skipTlsVerify>false</skipTlsVerify>
+      <namespace>default</namespace>
+      <jenkinsUrl>http://jenkins.default.svc.cluster.local:8080</jenkinsUrl>
+      <containerCap>10</containerCap>
+      <retentionTimeout>5</retentionTimeout>
+      <connectTimeout>0</connectTimeout>
+      <readTimeout>0</readTimeout>
+      <maxRequestsPerHost>32</maxRequestsPerHost>
+    </org.csanchez.jenkins.plugins.kubernetes.KubernetesCloud>
   </clouds>
-  <slaves/>
   <quietPeriod>5</quietPeriod>
-  <scmCheckoutRetryCount>3</scmCheckoutRetryCount>
+  <scmCheckoutRetryCount>0</scmCheckoutRetryCount>
   <views>
     <hudson.model.AllView>
       <owner class="hudson" reference="../../.."/>
-      <name>All</name>
+      <name>all</name>
       <filterExecutors>false</filterExecutors>
       <filterQueue>false</filterQueue>
       <properties class="hudson.model.View$PropertyList"/>
     </hudson.model.AllView>
   </views>
-  <primaryView>All</primaryView>
-  <slaveAgentPort>0</slaveAgentPort>
+  <primaryView>all</primaryView>
+  <slaveAgentPort>50000</slaveAgentPort>
+  <disabledAgentProtocols>
+    <string>JNLP2-connect</string>
+    <string>JNLP3-connect</string>
+  </disabledAgentProtocols>
   <label></label>
+  <crumbIssuer class="hudson.security.csrf.DefaultCrumbIssuer">
+    <excludeClientIPFromCrumb>true</excludeClientIPFromCrumb>
+  </crumbIssuer>
   <nodeProperties/>
   <globalNodeProperties/>
-  <noUsageStatistics>true</noUsageStatistics>
 </hudson>

@@ -1,25 +1,18 @@
-# Jenkins on DC/OS
-[![Build Status](https://jenkins.mesosphere.com/service/jenkins/buildStatus/icon?job=Jenkins/public-jenkins-dcos-master)](https://jenkins.mesosphere.com/service/jenkins/view/Velocity/job/Jenkins/job/public-jenkins-dcos-master/)
-[![Docker Stars](https://img.shields.io/docker/stars/mesosphere/jenkins.svg)][docker-hub]
-[![Docker Pulls](https://img.shields.io/docker/pulls/mesosphere/jenkins.svg)][docker-hub]
-[![](https://images.microbadger.com/badges/image/mesosphere/jenkins.svg)](http://microbadger.com/images/mesosphere/jenkins "Get your own image badge on microbadger.com")
+# Jenkins on Kubernetes
 
-Run a Jenkins master on DC/OS, using Docker and Nginx. This Jenkins instance is pre-configured to autoscale build agents onto the DC/OS cluster using the [Jenkins Mesos plugin][mesos-plugin].
+Run a Jenkins master on Kubernetes, using Docker. This Jenkins instance is pre-configured to autoscale build agents onto the Kubernetes cluster using the [Jenkins kubernetes plugin][kubernetes-plugin].
 
 ## Overview
 This repo contains a [Dockerfile](Dockerfile) that runs Jenkins inside a Docker
-container and uses [Nginx][nginx-home] as a reverse proxy. It also provides
-several Jenkins plugins and a basic Jenkins configuration in order to get you
-up and running quickly with Jenkins on DC/OS.
+container. It also provides several Jenkins plugins and a basic Jenkins configuration in order to get you
+up and running quickly with Jenkins on Kubernetes.
 
 ## Reporting issues
 
-Please report issues and submit feature requests for Jenkins on DC/OS by [creating an issue in the DC/OS JIRA][dcos-jira] (JIRA account required).
 
 ## Included in this repo
 Base packages:
   * [Jenkins][jenkins-home] 2.60.2 (LTS)
-  * [Nginx][nginx-home] 1.10.1
 
 Jenkins plugins:
   * ant v1.7
@@ -111,17 +104,14 @@ Jenkins plugins:
   * workflow-support v2.14
 
 ## Packaging
-Jenkins is available as a package in the [Mesosphere Universe][universe].
-To make changes to the Jenkins package, submit a pull request against the
-Universe.
 
 ## Installation
 
-To install Jenkins for the DC/OS, simply run `dcos package install jenkins` or install via the Universe page in the DC/OS UI.
+config options
 
-Jenkins should now be available at <http://dcos.example.com/service/jenkins>.
-See [Getting Started][getting-started] for more in-depth instructions and
-configuration options.
+kubernetes URL: https://kubernetes.default.svc.cluster.local
+Jenkins URL: http://jenkins.default.svc.cluster.local
+
 
 ## Releasing
 To release a new version of this package:
@@ -130,16 +120,12 @@ To release a new version of this package:
   the [jenkins-dind][jenkins-dind] Docker image (if needed).
   2. Add some release notes to [CHANGELOG.md](CHANGELOG.md)
   3. Tag the commit on master that you want to be released.
-  4. Once [the build][jenkins-build] has successfully completed, submit a new
-  pull request against [the Universe][universe] referencing the new tag.
 
-[dcos-jira]: https://jira.mesosphere.com/secure/CreateIssueDetails!init.jspa?pid=14110&issuetype=3
-[docker-hub]: https://hub.docker.com/r/mesosphere/jenkins
-[getting-started]: https://docs.mesosphere.com/service-docs/jenkins/quickstart/
+[jenkins-service]: https://hub.docker.com/r/slpcat/kube-jenkins-service
 [jenkins-conf]: /conf/jenkins/config.xml
-[jenkins-dind]: https://github.com/mesosphere/jenkins-dind-agent
+[jenkins-agent]: https://github.com/slpcat/kube-jenkins-dind-agent
 [jenkins-home]: https://jenkins-ci.org/
-[mesos-plugin]: https://github.com/jenkinsci/mesos-plugin
+[kubernetes-plugin]: https://plugins.jenkins.io/kubernetes https://github.com/jenkinsci/kubernetes-plugin/blob/master/README.md
 [nginx-home]: http://nginx.org/en/
-[jenkins-build]: https://jenkins.mesosphere.com/service/jenkins/job/public-jenkins-dcos-master/
-[universe]: https://github.com/mesosphere/universe
+[kubeapps]: https://kubeapps.com/
+

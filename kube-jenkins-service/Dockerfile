@@ -63,6 +63,7 @@ RUN /usr/local/bin/install-plugins.sh       \
   blueocean-commons:${BLUEOCEAN_VERSION}    \
   blueocean-config:${BLUEOCEAN_VERSION}     \
   blueocean-dashboard:${BLUEOCEAN_VERSION}  \
+  blueocean-display-url:2.2.0               \
   blueocean-events:${BLUEOCEAN_VERSION}     \
   blueocean-git-pipeline:${BLUEOCEAN_VERSION}          \
   blueocean-github-pipeline:${BLUEOCEAN_VERSION}       \
@@ -90,7 +91,7 @@ RUN /usr/local/bin/install-plugins.sh       \
   azure-credentials:1.4.0        \
   azure-vm-agents:0.6.0          \
   branch-api:2.0.17              \
-  build-failure-analyzer:1.19.0  \
+  build-failure-analyzer:1.19.1  \
   build-name-setter:1.6.7        \
   build-pipeline-plugin:1.5.8    \
   build-timeout:1.19             \

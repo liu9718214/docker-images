@@ -12,96 +12,152 @@ up and running quickly with Jenkins on Kubernetes.
 
 ## Included in this repo
 Base packages:
-  * [Jenkins][jenkins-home] 2.60.2 (LTS)
+  * [Jenkins][jenkins-home] 2.89.2 (LTS)
 
 Jenkins plugins:
-  * ant v1.7
-  * ace-editor v1.1
-  * ansicolor v0.5.2
-  * antisamy-markup-formatter v1.5
-  * artifactory v2.12.0
-  * authentication-tokens v1.3
-  * azure-vm-agents v0.4.7.1
-  * blueocean v1.2.4
-  * branch-api v2.0.10
-  * build-name-setter v1.6.5
-  * build-timeout v1.18
-  * cloudbees-folder v6.1.2
-  * conditional-buildstep v1.3.5
-  * config-file-provider v2.16.3
-  * copyartifact v1.38.1
-  * cvs v2.13
-  * docker-build-publish v1.3.2
-  * docker-workflow v1.13
-  * durable-task v1.14
-  * ec2 v1.36
-  * embeddable-build-status v1.9
-  * external-monitor-job v1.7
-  * ghprb v1.39.0
-  * git v3.5.1
-  * git-client v2.4.6
-  * git-server v1.7
-  * github v1.28.0
-  * github-api v1.85.1
-  * github-branch-source v2.0.8
-  * github-organization-folder v1.6
-  * gitlab v1.4.8
-  * gradle v1.27.1
-  * greenballs v1.15
-  * handlebars v1.1.1
-  * ivy v1.27.1
-  * jackson2-api v2.7.3
-  * job-dsl v1.65
-  * jobConfigHistory v2.17
-  * jquery v1.11.2-1
-  * ldap v1.17
-  * mapdb-api v1.0.9.0
-  * marathon v1.6.0
-  * matrix-auth v1.7
-  * matrix-project v1.11
-  * maven-plugin v2.15.1
-  * mesos v0.14.1
-  * metrics v3.1.2.9
-  * momentjs v1.1.1
-  * monitoring v1.69.0
-  * nant v1.4.3
-  * node-iterator-api v1.5.0
-  * pam-auth v1.3
-  * parameterized-trigger v2.35.2
-  * pipeline-build-step v2.5.1
-  * pipeline-github-lib v1.0
-  * pipeline-input-step v2.8
-  * pipeline-milestone-step v1.3.1
-  * pipeline-model-definition v1.1.8
-  * pipeline-rest-api v2.9
-  * pipeline-stage-step v2.2
-  * pipeline-stage-view v2.9
-  * plain-credentials v1.4
-  * rebuild v1.25
-  * role-strategy v2.6.0
-  * run-condition v1.0
-  * s3 v0.10.12
-  * saferestart v0.3
-  * saml v1.0.4
-  * scm-api v2.2.2
-  * ssh-agent v1.15
-  * ssh-slaves v1.21
-  * subversion v2.9
-  * timestamper v1.8.8
-  * translation v1.15
-  * variant v1.1
-  * windows-slaves v1.3.1
-  * workflow-aggregator v2.5
-  * workflow-api v2.17
-  * workflow-basic-steps v2.6
-  * workflow-cps v2.40
-  * workflow-cps-global-lib v2.9
-  * workflow-durable-task-step v2.15
-  * workflow-job v2.14.1
-  * workflow-multibranch v2.16
-  * workflow-scm-step v2.6
-  * workflow-step-api v2.12
-  * workflow-support v2.14
+  blueocean-commons
+  blueocean-config
+  blueocean-dashboard
+  blueocean-display-url
+  blueocean-events
+  blueocean-git-pipeline
+  blueocean-github-pipeline
+  blueocean-i18n
+  blueocean-jwt
+  blueocean-personalization
+  blueocean-pipeline-api-impl
+  blueocean-pipeline-editor
+  blueocean-pipeline-scm-api
+  blueocean-rest-impl
+  blueocean-rest
+  blueocean-web
+  blueocean
+  android-emulator
+  android-lint
+  ant
+  ace-editor
+  analysis-core
+  ansible
+  ansicolor
+  antisamy-markup-formatter
+  artifactory
+  audit-trail
+  authentication-tokens
+  azure-credentials
+  azure-vm-agents
+  branch-api
+  build-failure-analyzer
+  build-name-setter
+  build-pipeline-plugin
+  build-timeout
+  build-token-root
+  cloudbees-folder
+  cloverphp
+  conditional-buildstep
+  config-file-provider
+  copy-to-slave
+  copyartifact
+  cvs
+  dashboard-view
+  delivery-pipeline-plugin
+  description-setter
+  dingding-notifications
+  docker-build-publish
+  docker-workflow
+  durable-task
+  ec2
+  email-ext
+  embeddable-build-status
+  envinject
+  extended-read-permission
+  external-monitor-job
+  favorite
+  ghprb
+  git
+  git-client
+  git-server
+  github
+  github-api
+  github-organization-folder
+  gitlab
+  gitlab-hook
+  gitlab-oauth
+  gradle
+  greenballs
+  handlebars
+  ivy
+  jackson2-api
+  jenkins-multijob-plugin
+  job-dsl
+  jobConfigHistory
+  jquery
+  kpp-management-plugin
+  kubernetes
+  kubernetes-ci
+  kubernetes-cd
+  kubernetes-pipeline-steps
+  ldap
+  mapdb-api
+  marathon
+  matrix-auth
+  matrix-project
+  maven-plugin
+  mesos
+  metrics
+  momentjs
+  monitoring
+  msbuild
+  nant
+  node-iterator-api
+  pam-auth
+  parameterized-trigger
+  pipeline-build-step
+  pipeline-github-lib
+  pipeline-input-step
+  pipeline-milestone-step
+  pipeline-model-api
+  pipeline-model-definition
+  pipeline-model-extensions
+  pipeline-rest-api
+  pipeline-stage-step
+  pipeline-stage-view
+  plain-credentials
+  postbuildscript
+  publish-over-cifs
+  publish-over-ftp
+  publish-over-ssh
+  puppet
+  rebuild
+  role-strategy
+  run-condition
+  s3
+  saferestart
+  saml
+  saltstack
+  scm-api
+  ssh-agent
+  ssh-slaves
+  slave-setup
+  subversion
+  timestamper
+  translation
+  uno-choice
+  variant
+  view-job-filters
+  windows-slaves
+  workflow-aggregator
+  workflow-api
+  workflow-basic-steps
+  workflow-cps
+  workflow-cps-global-lib
+  workflow-durable-task-step
+  workflow-job
+  workflow-multibranch
+  workflow-scm-step
+  workflow-step-api
+  workflow-support
+  ws-cleanup
+  xcode-plugin
 
 ## Packaging
 

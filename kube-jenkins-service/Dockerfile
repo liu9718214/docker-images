@@ -90,7 +90,7 @@ RUN /usr/local/bin/install-plugins.sh       \
   authentication-tokens:1.3      \
   azure-credentials:1.4.0        \
   azure-vm-agents:0.6.0          \
-  branch-api:2.0.17              \
+  branch-api:2.0.18              \
   build-failure-analyzer:1.19.1  \
   build-name-setter:1.6.7        \
   build-pipeline-plugin:1.5.8    \
@@ -137,7 +137,7 @@ RUN /usr/local/bin/install-plugins.sh       \
   jobConfigHistory:2.18          \
   jquery:1.12.4-0                \
   kpp-management-plugin:1.0.0    \
-  kubernetes:1.1.2               \
+  kubernetes:1.1.3               \
   kubernetes-ci:1.3              \
   kubernetes-cd:0.1.4            \
   kubernetes-pipeline-steps:1.5  \
@@ -151,7 +151,7 @@ RUN /usr/local/bin/install-plugins.sh       \
   metrics:3.1.2.10               \
   momentjs:1.1.1                 \
   monitoring:1.70.0              \
-  msbuild:1.28                   \
+  msbuild:1.29                   \
   nant:1.4.3                     \
   node-iterator-api:1.5.0        \
   pam-auth:1.3                   \
@@ -161,16 +161,16 @@ RUN /usr/local/bin/install-plugins.sh       \
   pipeline-input-step:2.8        \
   pipeline-milestone-step:1.3.1  \
   pipeline-model-api:1.2.5       \
-  pipeline-model-definition:1.2.5 \
-  pipeline-model-extensions:1.2.5 \
+  pipeline-model-definition:1.2.6 \
+  pipeline-model-extensions:1.2.6 \
   pipeline-rest-api:2.9          \
   pipeline-stage-step:2.3        \
   pipeline-stage-view:2.9        \
   plain-credentials:1.4          \
   postbuildscript:2.2.1          \
-  publish-over-cifs:0.5          \
-  publish-over-ftp:1.12          \
-  publish-over-ssh:1.17          \
+  publish-over-cifs:0.6          \
+  publish-over-ftp:1.13          \
+  publish-over-ssh:1.18          \
   puppet:1.1                     \
   rebuild:1.27                   \
   role-strategy:2.6.1            \
@@ -178,7 +178,7 @@ RUN /usr/local/bin/install-plugins.sh       \
   s3:0.10.12                     \
   saferestart:0.3                \
   saml:1.0.4                     \
-  saltstack:3.1.2                \
+  saltstack:3.1.3                \
   scm-api:2.2.6                  \
   ssh-agent:1.15                 \
   ssh-slaves:1.25                \
